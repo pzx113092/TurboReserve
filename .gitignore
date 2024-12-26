@@ -20,3 +20,4 @@ obj/
 ## Ignore packages folder
 *.nupkg
 *.snupkg
+**/secrets.json

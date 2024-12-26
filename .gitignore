@@ -10,6 +10,14 @@ bin/
 obj/
 .vscode/
 .vs/
+bin/
+obj/
+.vs/
+*.suo
+*.user
+*.cache
+*.log
+appsettings.Local.json
 
 ## Ignore configuration files
 *.user

@@ -1,0 +1,36 @@
+﻿@model List<TurboReserve.Models.ReservationViewModel>
+
+<h1>Moje Rezerwacje</h1>
+
+@if (!Model.Any())
+{
+    <p>Nie masz jeszcze żadnych rezerwacji.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Usługa</th>
+                <th>Usługodawca</th>
+                <th>Data rezerwacji</th>
+                <th>Godzina rozpoczęcia</th>
+                <th>Godzina zakończenia</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in Model)
+            {
+                <tr>
+                    <td>@reservation.ServiceName</td>
+                    <td>@reservation.ServiceProviderName</td>
+                    <td>@reservation.ReservationDate.ToShortDateString()</td>
+                    <td>@reservation.StartTime.ToShortTimeString()</td>
+                    <td>@reservation.EndTime.ToShortTimeString()</td>
+                    <td>@reservation.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,42 @@
+﻿@model TurboReserve.Models.ServiceProviderViewModel
+
+<h1>@Model.BusinessName</h1>
+<p><strong>Adres:</strong> @Model.Address, @Model.City @Model.ZipCode</p>
+
+<h2>Lokalizacja</h2>
+<div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
+                .bindPopup("@Model.BusinessName").openPopup();
+        });
+    </script>
+</div>
+
+<h2>Lista Usług</h2>
+@if (Model.Services.Count == 0)
+{
+    <p>Brak usług.</p>
+}
+else
+{
+    <ul>
+        @foreach (var service in Model.Services)
+        {
+            <li>
+                <strong>@service.Name:</strong> @service.Description - @service.Price
+                <a class="btn btn-secondary" asp-action="ServiceSchedule" asp-route-id="@service.ServiceId">Zobacz grafik</a>
+            </li>
+        }
+    </ul>
+}
+

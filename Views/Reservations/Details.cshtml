@@ -1,0 +1,14 @@
+﻿@model TurboReserve.Models.Reservation
+
+@{
+    ViewData["Title"] = "Szczegóły rezerwacji";
+}
+
+<h1>Szczegóły rezerwacji</h1>
+<p>Data: @Model.ReservationDate</p>
+<p>Usługodawca: @Model.ServiceProvider?.BusinessName</p>
+<p>Usługa: @Model.Service?.Name</p>
+<p>Status: @Model.Status</p>
+
+<a class="btn btn-secondary" href="@Url.Action("Index")">Powrót</a>
+

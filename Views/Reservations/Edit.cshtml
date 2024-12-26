@@ -1,0 +1,44 @@
+﻿@model TurboReserve.Models.Reservation
+
+@{
+    ViewData["Title"] = "Edytuj rezerwację";
+}
+
+<h1>Edytuj rezerwację</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label>Data rezerwacji</label>
+        <input asp-for="ReservationDate" type="datetime-local" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Usługodawca</label>
+        <input asp-for="ServiceProviderId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Usługa</label>
+        <input asp-for="ServiceId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="Status" class="form-control">
+            @foreach (var statusValue in Enum.GetValues(typeof(TurboReserve.Models.Enums.ReservationStatus)))
+            {
+                bool selected = Model.Status == (TurboReserve.Models.Enums.ReservationStatus)statusValue;
+                if (selected)
+                {
+                    <option value="@statusValue" selected="selected">@statusValue</option>
+                }
+                else
+                {
+                    <option value="@statusValue">@statusValue</option>
+                }
+            }
+
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Anuluj</a>
+</form>
+

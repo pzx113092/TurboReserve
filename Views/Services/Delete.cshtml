@@ -1,0 +1,15 @@
+﻿@model TurboReserve.Models.Service
+
+@{
+    ViewData["Title"] = "Usuń usługę";
+}
+
+<h1>Czy na pewno chcesz usunąć tę usługę?</h1>
+
+<p>@Model.Name (@Model.Price PLN)</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Anuluj</a>
+</form>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TurboReserve.Models.Service>
+
+@{
+    ViewData["Title"] = "Lista usług";
+}
+
+<h1>Lista usług</h1>
+
+<p><a class="btn btn-primary" href="@Url.Action("Create")">Dodaj usługę</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Opis</th>
+            <th>Cena</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Name</td>
+                <td>@service.Description</td>
+                <td>@service.Price</td>
+                <td>
+                    <a class="btn btn-info" href="@Url.Action("Details", new { id = service.Id })">Szczegóły</a>
+                    <a class="btn btn-warning" href="@Url.Action("Edit", new { id = service.Id })">Edytuj</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = service.Id })">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

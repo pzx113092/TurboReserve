@@ -1,0 +1,12 @@
+﻿@model TurboReserve.Models.Service
+
+@{
+    ViewData["Title"] = "Szczegóły usługi";
+}
+
+<h1>@Model.Name</h1>
+<p>@Model.Description</p>
+<p>Cena: @Model.Price PLN</p>
+
+<a class="btn btn-secondary" href="@Url.Action("Index")">Powrót</a>
+

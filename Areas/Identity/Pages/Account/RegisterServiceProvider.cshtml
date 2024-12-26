@@ -1,0 +1,114 @@
+﻿@page
+@model TurboReserve.Areas.Identity.Pages.Account.RegisterServiceProviderModel
+@{
+    ViewData["Title"] = "Rejestracja Usługodawcy";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h4>Utwórz nowe konto usługodawcy</h4>
+            
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Input.BusinessName">Nazwa firmy</label>
+                <input asp-for="Input.BusinessName" class="form-control" />
+                <span asp-validation-for="Input.BusinessName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Address">Adres</label>
+                <input asp-for="Input.Address" class="form-control" />
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.City">Miasto</label>
+                <input asp-for="Input.City" class="form-control" />
+                <span asp-validation-for="Input.City" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.ZipCode">Kod pocztowy</label>
+                <input asp-for="Input.ZipCode" class="form-control" />
+                <span asp-validation-for="Input.ZipCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Email">Email</label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Password">Hasło</label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword">Potwierdź hasło</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <!-- Mapa -->
+            <div class="form-group">
+                <label> Zaznacz lokalizację </label>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+            <div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;"></div>
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const defaultLocation = [52.2297, 21.0122]; // Domyślna lokalizacja (Warszawa)
+                    const map = L.map('map').setView(defaultLocation, 13);
+
+                    // Dodanie warstwy kafelkowej OpenStreetMap
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    // Dodanie pinezki
+                    const marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
+
+                    // Obsługa przeciągania pinezki
+                    marker.on('dragend', function (e) {
+                        const latLng = marker.getLatLng();
+
+                        // Znajdowanie pól Latitude i Longitude w DOM
+                        const latitudeField = document.getElementById("Input_Latitude");
+                        const longitudeField = document.getElementById("Input_Longitude");
+
+                        // Aktualizacja wartości pól
+                        if (latitudeField && longitudeField) {
+                            latitudeField.value = latLng.lat.toFixed(6); // Szerokość geograficzna
+                            longitudeField.value = latLng.lng.toFixed(6); // Długość geograficzna
+                        }
+                    });
+                });
+            </script>
+            </div>
+
+           
+            <div class="form-group">
+                
+                <input asp-for="Input.Latitude" class="form-control" readonly />
+                <span asp-validation-for="Input.Latitude" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                
+                <input asp-for="Input.Longitude" class="form-control" readonly />
+                <span asp-validation-for="Input.Longitude" class="text-danger"></span>
+            </div>
+
+            <br />
+            <button type="submit" class="btn btn-primary">Zarejestruj</button>
+        </form>
+       
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model List<TurboReserve.Models.ServiceProviderViewModel>
+@{
+    ViewData["Title"] = "Lista Usługodawców";
+}
+
+<h1>Lista Usługodawców</h1>
+
+<form method="get" asp-action="ServiceProviders">
+    <div class="form-group">
+        <input type="text" name="searchQuery" value="@ViewBag.SearchQuery" class="form-control" placeholder="Wyszukaj usługodawcę lub usługę..." />
+    </div>
+    <br><button type="submit" class="btn btn-primary">Szukaj</button>
+    
+</form>
+
+<div class="mt-3">
+    <a asp-action="ServiceProviders" asp-route-sortOrder="name_asc">Sortuj według nazwy (A-Z)</a> |
+    <a asp-action="ServiceProviders" asp-route-sortOrder="city">Sortuj według miasta (A-Z)</a> |
+   
+</div>
+
+<hr />
+
+@if (Model.Count == 0)
+{
+    <p>Brak wyników dla podanego wyszukiwania.</p>
+}
+else
+{
+    <div class="accordion" id="serviceProvidersAccordion">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var provider = Model[i];
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-@i">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@i" aria-expanded="false" aria-controls="collapse-@i">
+                        @provider.BusinessName (Miasto: @provider.City)
+                    </button>
+                </h2>
+                <div id="collapse-@i" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#serviceProvidersAccordion">
+                    <div class="accordion-body">
+                        <p><strong>Adres:</strong> @provider.Address, @provider.City @provider.ZipCode</p>
+                        <h5>Usługi:</h5>
+                        @if (provider.Services.Count == 0)
+                        {
+                            <p>Brak usług.</p>
+                        }
+                        else
+                        {
+                            <ul>
+                                @foreach (var service in provider.Services)
+                                {
+                                    <li>
+                                        <strong>@service.Name:</strong> @service.Description - @service.Price
+                                    </li>
+                                }
+                            </ul>
+                        }
+
+                        <a class="btn btn-primary" asp-action="ServiceProviderDetails" asp-controller="Customer" asp-route-id="@provider.ServiceProviderId">
+                            Zobacz szczegóły
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+}
+

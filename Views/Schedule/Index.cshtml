@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TurboReserve.Models.ScheduleSlot>
+
+<h1>Twój Grafik</h1>
+<p><a asp-action="Create" class="btn btn-primary">Dodaj dostępny termin</a></p>
+
+<form method="get" asp-action="Index">
+    <div class="row">
+        <div class="col-md-5">
+            <label for="from">Data od:</label>
+            <input type="date" id="from" name="from" class="form-control" value="@ViewBag.StartDate" />
+        </div>
+        <div class="col-md-5">
+            <label for="to">Data do:</label>
+            <input type="date" id="to" name="to" class="form-control" value="@ViewBag.EndDate" />
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary">Filtruj</button>
+        </div>
+    </div>
+</form>
+
+<hr />
+
+@if (!Model.Any())
+{
+    <p>Brak terminów w wybranym zakresie dat.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Usługa</th>
+                <th>Początek</th>
+                <th>Koniec</th>
+                <th>Zarezerwowane</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var slot in Model)
+            {
+                <tr>
+                    <td>@slot.Service.Name</td>
+                    <td>@slot.StartTime</td>
+                    <td>@slot.EndTime</td>
+                    <td>@(slot.IsBooked ? "Tak" : "Nie")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,27 @@
+﻿@model TurboReserve.Models.ScheduleSlot
+
+<h1>Dodaj Dostępny Termin</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ServiceId"></label>
+        <select asp-for="ServiceId" class="form-control" asp-items="@(new SelectList(ViewBag.Services, "Id", "Name"))"></select>
+        <span asp-validation-for="ServiceId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartTime"></label>
+        <input asp-for="StartTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndTime"></label>
+        <input asp-for="EndTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Dodaj</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+<div asp-validation-summary="All" class="text-danger"></div>

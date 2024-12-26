@@ -1,0 +1,45 @@
+﻿@model TurboReserve.Models.ServiceScheduleViewModel
+
+<h1>Grafik dla usługi: @Model.ServiceName</h1>
+
+@if (Model.ScheduleSlots.Count == 0)
+{
+    <p>Brak dostępnych terminów.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data i godzina rozpoczęcia</th>
+                <th>Data i godzina zakończenia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var slot in Model.ScheduleSlots)
+            {
+                <tr>
+                    <td>@slot.StartTime</td>
+                    <td>@slot.EndTime</td>
+                    <td>
+                        @if (!slot.IsBooked)
+                        {
+                            <form method="post" asp-action="BookService" asp-route-id="@slot.SlotId">
+                                <button type="submit" class="btn btn-primary">Zarezerwuj</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Zarezerwowany</span>
+                        }
+                    </td>
+                </tr>
+            }
+            }
+        </tbody>
+
+
+    </table>
+}
+

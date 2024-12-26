@@ -1,0 +1,37 @@
+﻿@model IEnumerable<TurboReserve.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Moje rezerwacje";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p><a class="btn btn-primary" href="@Url.Action("Create")">Zarezerwuj usługę</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data rezerwacji</th>
+            <th>Usługodawca</th>
+            <th>Usługa</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.ReservationDate</td>
+                <td>@r.ServiceProvider?.BusinessName</td>
+                <td>@r.Service?.Name</td>
+                <td>@r.Status</td>
+                <td>
+                    <a class="btn btn-info" href="@Url.Action("Details", new { id = r.Id })">Szczegóły</a>
+                    <a class="btn btn-warning" href="@Url.Action("Edit", new { id = r.Id })">Edytuj</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = r.Id })">Anuluj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

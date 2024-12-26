@@ -1,0 +1,17 @@
+﻿@model TurboReserve.Models.Reservation
+
+@{
+    ViewData["Title"] = "Anuluj rezerwację";
+}
+
+<h1>Czy na pewno chcesz anulować tę rezerwację?</h1>
+
+<p>Data: @Model.ReservationDate</p>
+<p>Usługodawca: @Model.ServiceProvider?.BusinessName</p>
+<p>Usługa: @Model.Service?.Name</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Anuluj</button>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Wróć</a>
+</form>

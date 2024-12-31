@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using TurboReserve.Data; // Namespace do Twojego kontekstu
-using TurboReserve.Models; // Namespace do Twojego modelu ServiceProvider
+using TurboReserve.Data;
+using TurboReserve.Models; 
 
 namespace TurboReserve.Areas.Identity.Pages.Account
 {
@@ -14,21 +14,21 @@ namespace TurboReserve.Areas.Identity.Pages.Account
         public class RegisterServiceProviderInputModel
         {
             [Required]
-            public string BusinessName { get; set; }
+            public required string BusinessName { get; set; }
 
             [Required, EmailAddress]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
             [Required, DataType(DataType.Password)]
-            public string Password { get; set; }
+            public required string Password { get; set; }
 
             [Required, DataType(DataType.Password)]
             [Compare("Password")]
-            public string ConfirmPassword { get; set; }
+            public required string ConfirmPassword { get; set; }
 
-            public string Address { get; set; }
-            public string City { get; set; }
-            public string ZipCode { get; set; }
+            public required string Address { get; set; }
+            public required string City { get; set; }
+            public required string ZipCode { get; set; }
             [Required]
             public double Latitude { get; set; }
 
@@ -59,12 +59,12 @@ namespace TurboReserve.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public void OnGet(string returnUrl = null)
+        public void OnGet(string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
@@ -74,10 +74,10 @@ namespace TurboReserve.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // Przypisz rolę "ServiceProvider"
+                    
                     await _userManager.AddToRoleAsync(user, "ServiceProvider");
 
-                    // Teraz dodaj rekord w tabeli ServiceProviders
+                    
                     var serviceProvider = new Models.ServiceProvider
                     {
                         IdentityUserId = user.Id,
@@ -87,7 +87,7 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                         ZipCode = Input.ZipCode,
                         Latitude = Input.Latitude,
                         Longitude = Input.Longitude
-                        // ... inne pola jeżeli są wymagane
+                        
                     };
                     _context.ServiceProviders.Add(serviceProvider);
                     await _context.SaveChangesAsync();
@@ -103,7 +103,7 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+           
             return Page();
         }
     }

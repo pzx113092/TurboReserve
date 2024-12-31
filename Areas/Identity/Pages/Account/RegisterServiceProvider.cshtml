@@ -56,55 +56,57 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
 
-            <!-- Mapa -->
+                        <!-- Mapa -->
             <div class="form-group">
                 <label> Zaznacz lokalizację </label>
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;"></div>
-            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const defaultLocation = [52.2297, 21.0122]; // Domyślna lokalizacja (Warszawa)
-                    const map = L.map('map').setView(defaultLocation, 13);
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                <div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;"></div>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const defaultLocation = [52.408238, 16.933504]; // Domyślna lokalizacja
+                        const map = L.map('map').setView(defaultLocation, 13);
 
-                    // Dodanie warstwy kafelkowej OpenStreetMap
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
+                        // Dodanie warstwy kafelkowej OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
 
-                    // Dodanie pinezki
-                    const marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
+                        // Dodanie pinezki
+                        const marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
 
-                    // Obsługa przeciągania pinezki
-                    marker.on('dragend', function (e) {
-                        const latLng = marker.getLatLng();
-
-                        // Znajdowanie pól Latitude i Longitude w DOM
+                        // Ustawienie domyślnych wartości w polach Latitude i Longitude
                         const latitudeField = document.getElementById("Input_Latitude");
                         const longitudeField = document.getElementById("Input_Longitude");
-
-                        // Aktualizacja wartości pól
                         if (latitudeField && longitudeField) {
-                            latitudeField.value = latLng.lat.toFixed(6); // Szerokość geograficzna
-                            longitudeField.value = latLng.lng.toFixed(6); // Długość geograficzna
+                            latitudeField.value = defaultLocation[0].toFixed(6);
+                            longitudeField.value = defaultLocation[1].toFixed(6);
                         }
+
+                        // Obsługa przeciągania pinezki
+                        marker.on('dragend', function (e) {
+                            const latLng = marker.getLatLng();
+
+                            // Aktualizacja wartości pól
+                            if (latitudeField && longitudeField) {
+                                latitudeField.value = latLng.lat.toFixed(6); // Szerokość geograficzna
+                                longitudeField.value = latLng.lng.toFixed(6); // Długość geograficzna
+                            }
+                        });
                     });
-                });
-            </script>
+                </script>
             </div>
 
-           
             <div class="form-group">
-                
-                <input asp-for="Input.Latitude" class="form-control" readonly />
+                <input asp-for="Input.Latitude" id="Input_Latitude" class="form-control" readonly value="52.408238" />
                 <span asp-validation-for="Input.Latitude" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                
-                <input asp-for="Input.Longitude" class="form-control" readonly />
+                <input asp-for="Input.Longitude" id="Input_Longitude" class="form-control" readonly value="16.933504" />
                 <span asp-validation-for="Input.Longitude" class="text-danger"></span>
             </div>
+
 
             <br />
             <button type="submit" class="btn btn-primary">Zarejestruj</button>

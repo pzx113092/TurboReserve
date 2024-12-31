@@ -1,4 +1,7 @@
-﻿namespace TurboReserve.Models
+﻿using System.Collections.Generic; // Dodano, aby List<> działało poprawnie
+using System.ComponentModel.DataAnnotations;
+
+namespace TurboReserve.Models
 {
     public class ServiceProviderViewModel
     {
@@ -14,9 +17,15 @@
 
     public class ServiceViewModel
     {
-        public int ServiceId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Price { get; set; }
+        public int ServiceId { get; set; } 
+
+        
+        public string Name { get; set; } 
+
+        
+        public string Description { get; set; } 
+
+       
+        public string Price { get; set; } 
     }
 }

@@ -9,15 +9,15 @@
 <form asp-action="Create" method="post">
     <div class="form-group">
         <label>Nazwa</label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control" placeholder="Wprowadź nazwę usługi" />
     </div>
     <div class="form-group">
         <label>Opis</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
+        <textarea asp-for="Description" class="form-control" placeholder="Podaj opis usługi"></textarea>
     </div>
     <div class="form-group">
         <label>Cena</label>
-        <input asp-for="Price" class="form-control" />
+        <input asp-for="Price" class="form-control" placeholder="Wprowadź cenę usługi" />
     </div>
     <button type="submit" class="btn btn-primary">Zapisz</button>
     <a class="btn btn-secondary" href="@Url.Action("Index")">Anuluj</a>

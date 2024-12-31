@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using TurboReserve.Services;
 using TurboReserve.Models;
 
-// Załóżmy, że tylko usługodawcy i admini mogą zarządzać usługami
 namespace TurboReserve.Controllers
 {
-    [Authorize(Roles = "ServiceProvider,Admin")]
+    [Authorize(Roles = "ServiceProvider")]
     public class ServicesController : Controller
     {
         private readonly IServiceService _serviceService;
@@ -90,8 +89,6 @@ namespace TurboReserve.Controllers
                 existing.Name = service.Name;
                 existing.Description = service.Description;
                 existing.Price = service.Price;
-                // Zakładamy, że ServiceProviderId nie zmienia się w trakcie edycji,
-                // jeśli chcesz zmienić też usługodawcę, dodaj logikę
 
                 await _serviceService.UpdateAsync(existing);
                 return RedirectToAction(nameof(Index));

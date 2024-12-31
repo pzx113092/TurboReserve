@@ -16,9 +16,11 @@ namespace TurboReserve.Models
         public string Price { get; set; }
 
         public int ServiceProviderId { get; set; }
+        [Required]
         public ServiceProvider ServiceProvider { get; set; }
-     
+        [Required]
         public List<ScheduleSlot> ScheduleSlots { get; set; }
+        [Required]
         public List<Reservation> Reservations { get; set; }
     }
 }

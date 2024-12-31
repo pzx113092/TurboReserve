@@ -1,31 +1,32 @@
-﻿using System.Collections.Generic; // Dodano, aby List<> działało poprawnie
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TurboReserve.Models
 {
     public class ServiceProviderViewModel
     {
         public int ServiceProviderId { get; set; }
+        [Required]
         public string BusinessName { get; set; }
+        [Required]
         public string Address { get; set; }
+        [Required]
         public string City { get; set; }
+        [Required]
         public string ZipCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        [Required]
         public List<ServiceViewModel> Services { get; set; }
     }
 
     public class ServiceViewModel
     {
-        public int ServiceId { get; set; } 
-
-        
-        public string Name { get; set; } 
-
-        
-        public string Description { get; set; } 
-
-       
-        public string Price { get; set; } 
+        public int ServiceId { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public string Price { get; set; }
     }
 }

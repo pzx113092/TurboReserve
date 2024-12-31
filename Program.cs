@@ -15,13 +15,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-// Dodajemy Identity z obsługą ról:
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
-    // konfiguracja opcji logowania, haseł itp.
     options.SignIn.RequireConfirmedAccount = false;
 })
-.AddRoles<IdentityRole>() // WAŻNE: ta linijka dodaje RoleManager i wsparcie ról
+.AddRoles<IdentityRole>() 
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();

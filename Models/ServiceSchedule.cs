@@ -1,9 +1,12 @@
-﻿namespace TurboReserve.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace TurboReserve.Models
 {
     public class ServiceScheduleViewModel
     {
         public int ServiceId { get; set; }
+        [Required]
         public string ServiceName { get; set; }
+        [Required]
         public List<ScheduleSlotViewModel> ScheduleSlots { get; set; }
     }
 

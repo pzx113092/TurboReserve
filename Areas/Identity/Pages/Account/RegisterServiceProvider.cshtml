@@ -67,15 +67,15 @@
                         const defaultLocation = [52.408238, 16.933504]; // Domyślna lokalizacja
                         const map = L.map('map').setView(defaultLocation, 13);
 
-                        // Dodanie warstwy kafelkowej OpenStreetMap
+                        
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         }).addTo(map);
 
-                        // Dodanie pinezki
+                        
                         const marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
 
-                        // Ustawienie domyślnych wartości w polach Latitude i Longitude
+                        
                         const latitudeField = document.getElementById("Input_Latitude");
                         const longitudeField = document.getElementById("Input_Longitude");
                         if (latitudeField && longitudeField) {
@@ -83,14 +83,14 @@
                             longitudeField.value = defaultLocation[1].toFixed(6);
                         }
 
-                        // Obsługa przeciągania pinezki
+                        
                         marker.on('dragend', function (e) {
                             const latLng = marker.getLatLng();
 
-                            // Aktualizacja wartości pól
+                            
                             if (latitudeField && longitudeField) {
-                                latitudeField.value = latLng.lat.toFixed(6); // Szerokość geograficzna
-                                longitudeField.value = latLng.lng.toFixed(6); // Długość geograficzna
+                                latitudeField.value = latLng.lat.toFixed(6); 
+                                longitudeField.value = latLng.lng.toFixed(6); 
                             }
                         });
                     });

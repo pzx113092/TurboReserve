@@ -24,7 +24,6 @@ public class ScheduleController : Controller
         var userId = _userManager.GetUserId(User);
         var serviceProviderId = await GetServiceProviderIdByUserId(userId);
 
-        // Pobierz listę usług dostępnych dla tego usługodawcy
         var services = await _context.Services
         .Where(s => s.ServiceProviderId == serviceProviderId)
         .ToListAsync();

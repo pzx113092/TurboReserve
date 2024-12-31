@@ -89,7 +89,7 @@ namespace TurboReserve.Controllers
                 .Include(sp => sp.Services)
                 .AsQueryable();
 
-            // Wyszukiwanie
+            
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(sp =>
@@ -97,12 +97,12 @@ namespace TurboReserve.Controllers
                     sp.Services.Any(s => s.Name.Contains(searchQuery)));
             }
 
-            // Sortowanie
+            
             query = sortOrder switch
             {
                 "name_asc" => query.OrderBy(sp => sp.BusinessName),
                 "city" => query.OrderBy(sp => sp.City),
-                _ => query.OrderBy(sp => sp.BusinessName), // Domyślne sortowanie
+                _ => query.OrderBy(sp => sp.BusinessName), 
             };
 
             // Pobranie danych
@@ -140,7 +140,7 @@ namespace TurboReserve.Controllers
             var userId = _userManager.GetUserId(User);
             var slot = await _context.ScheduleSlots
                 .Include(s => s.Service)
-                .ThenInclude(service => service.ServiceProvider) // Pobierz usługodawcę
+                .ThenInclude(service => service.ServiceProvider) 
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (slot == null || slot.IsBooked)
@@ -149,7 +149,7 @@ namespace TurboReserve.Controllers
                 return RedirectToAction("ServiceSchedule", new { id = slot.ServiceId });
             }
 
-            // Upewnij się, że ServiceProvider istnieje
+            
             var serviceProviderId = slot.Service.ServiceProvider?.Id;
             if (serviceProviderId == null)
             {
@@ -157,7 +157,7 @@ namespace TurboReserve.Controllers
                 return RedirectToAction("ServiceSchedule", new { id = slot.ServiceId });
             }
 
-            // Utwórz nową rezerwację
+            
             var reservation = new Reservation
             {
                 CustomerId = userId,
@@ -166,10 +166,10 @@ namespace TurboReserve.Controllers
                 StartTime = slot.StartTime,
                 EndTime = slot.EndTime,
                 Status = ReservationStatus.Pending,
-                ServiceProviderId = serviceProviderId.Value // Przypisz poprawny ServiceProviderId
+                ServiceProviderId = serviceProviderId.Value 
             };
 
-            // Oznacz slot jako zarezerwowany
+           
             slot.IsBooked = true;
 
             _context.Reservations.Add(reservation);

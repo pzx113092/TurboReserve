@@ -7,15 +7,15 @@ namespace TurboReserve.Models
     {
         public int Id { get; set; }
         [Required]
-        public required string IdentityUserId { get; set; }
+        public string IdentityUserId { get; set; }
         [Required]
-        public required string BusinessName { get; set; }
+        public string BusinessName { get; set; }
         [Required]
-        public required string Address { get; set; }
+        public string Address { get; set; }
         [Required]
-        public required string City { get; set; }
+        public string City { get; set; }
         [Required]
-        public required string ZipCode { get; set; }
+        public string ZipCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public virtual IdentityUser User { get; set; }

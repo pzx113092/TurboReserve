@@ -1,4 +1,4 @@
-Przed komplilacją aplikacji wprowadź w Package Manager Console:
+W razie problemów z kompilacją aplikacji wprowadź w Package Manager Console:
 
 ```cmd
 dotnet nuget remove source "Microsoft Visual Studio Offline Packages"

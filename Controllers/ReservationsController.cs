@@ -24,7 +24,6 @@ namespace TurboReserve.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             var userId = _userManager.GetUserId(User);
             var reservations = await _reservationService.GetByCustomerIdAsync(userId);
             return View(reservations);
@@ -52,7 +51,6 @@ namespace TurboReserve.Controllers
         // GET: Reservations/Create
         public IActionResult Create()
         {
-            
             return View();
         }
 
@@ -66,10 +64,7 @@ namespace TurboReserve.Controllers
                 
                 var userId = _userManager.GetUserId(User);
                 reservation.CustomerId = userId;
-
-                
                 reservation.Status = Models.Enums.ReservationStatus.Pending;
-
                 await _reservationService.AddAsync(reservation);
                 return RedirectToAction(nameof(Index));
             }
@@ -123,7 +118,6 @@ namespace TurboReserve.Controllers
                 existingReservation.Status = reservation.Status;
                 existingReservation.ServiceId = reservation.ServiceId;
                 existingReservation.ServiceProviderId = reservation.ServiceProviderId;
-
                 await _reservationService.UpdateAsync(existingReservation);
                 return RedirectToAction(nameof(Index));
             }

@@ -18,7 +18,6 @@ public class ScheduleController : Controller
         _userManager = userManager;
     }
 
-
     public async Task<IActionResult> Create()
     {
         var userId = _userManager.GetUserId(User);
@@ -39,11 +38,7 @@ public class ScheduleController : Controller
     {
         var userId = _userManager.GetUserId(User);
         int serviceProviderId = await GetServiceProviderIdByUserId(userId);
-
-
         model.ServiceProviderId = serviceProviderId;
-
-
         _context.ScheduleSlots.Add(model);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
@@ -110,7 +105,6 @@ public class ScheduleController : Controller
 
         ViewBag.StartDate = startDate.ToString("yyyy-MM-dd");
         ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");
-
         return View(scheduleSlots);
     }
 

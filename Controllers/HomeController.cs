@@ -26,7 +26,6 @@ namespace TurboReserve.Controllers
                 return View("ServiceProviderIndex");
             }
 
-
             return View();
         }
 
@@ -45,8 +44,5 @@ namespace TurboReserve.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-
     }
 }

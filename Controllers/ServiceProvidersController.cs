@@ -16,14 +16,12 @@ namespace TurboReserve.Controllers
             _serviceProviderService = serviceProviderService;
         }
 
-        // GET: ServiceProviders
         public async Task<IActionResult> Index()
         {
             var providers = await _serviceProviderService.GetAllAsync();
             return View(providers);
         }
 
-        // GET: ServiceProviders/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var provider = await _serviceProviderService.GetByIdAsync(id);
@@ -34,16 +32,13 @@ namespace TurboReserve.Controllers
             return View(provider);
         }
 
-        // GET: ServiceProviders/Create
+
         public IActionResult Create()
         {
             return View();
         }
 
 
-
-
-        // POST: ServiceProviders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.ServiceProvider provider)
@@ -56,7 +51,6 @@ namespace TurboReserve.Controllers
             return View(provider);
         }
 
-        // GET: ServiceProviders/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var provider = await _serviceProviderService.GetByIdAsync(id);
@@ -67,7 +61,6 @@ namespace TurboReserve.Controllers
             return View(provider);
         }
 
-        // POST: ServiceProviders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Models.ServiceProvider provider)
@@ -85,7 +78,6 @@ namespace TurboReserve.Controllers
             return View(provider);
         }
 
-        // GET: ServiceProviders/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var provider = await _serviceProviderService.GetByIdAsync(id);
@@ -96,7 +88,6 @@ namespace TurboReserve.Controllers
             return View(provider);
         }
 
-        // POST: ServiceProviders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

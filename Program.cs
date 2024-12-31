@@ -5,7 +5,6 @@ using TurboReserve;
 using TurboReserve.Services;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")

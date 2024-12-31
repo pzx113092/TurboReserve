@@ -105,7 +105,6 @@ namespace TurboReserve.Controllers
                 _ => query.OrderBy(sp => sp.BusinessName), 
             };
 
-            // Pobranie danych
             var serviceProviders = await query
                 .Select(sp => new ServiceProviderViewModel
                 {
@@ -123,8 +122,6 @@ namespace TurboReserve.Controllers
                     }).ToList()
                 })
                 .ToListAsync();
-
-
 
             ViewBag.SortOrder = sortOrder;
             ViewBag.SearchQuery = searchQuery;
@@ -205,7 +202,5 @@ namespace TurboReserve.Controllers
 
             return View(reservations);
         }
-
-
     }
 }

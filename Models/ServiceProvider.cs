@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-
 namespace TurboReserve.Models
 {
     public class ServiceProvider
@@ -19,7 +18,6 @@ namespace TurboReserve.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public virtual IdentityUser User { get; set; }
-
         public virtual ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }

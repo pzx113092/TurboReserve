@@ -59,7 +59,6 @@ namespace TurboReserve.Controllers
         }
 
 
-        // GET: ServiceProviderPanel/Index
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
@@ -69,7 +68,6 @@ namespace TurboReserve.Controllers
             return View(services);
         }
 
-        // GET: ServiceProviderPanel/Create
         public IActionResult Create()
         {
             return View();
@@ -81,10 +79,7 @@ namespace TurboReserve.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var serviceProviderId = await GetServiceProviderIdByUserId(userId);
-
-
             model.ServiceProviderId = serviceProviderId; 
-
             var existingServiceCount = await _context.Services
                 .Where(s => s.ServiceProviderId == serviceProviderId)
                 .CountAsync();
@@ -99,10 +94,8 @@ namespace TurboReserve.Controllers
             TempData["SuccessMessage"] = "Dodano usługę";
             await _serviceService.AddAsync(model);
             return RedirectToAction(nameof(Index));
-
         }
         
-
 
         [Authorize(Roles = "ServiceProvider")]
         [HttpPost]
@@ -121,7 +114,6 @@ namespace TurboReserve.Controllers
                 .Where(s => s.ServiceProvider.IdentityUserId == userId)
                 .CountAsync();
 
-            
             if (serviceCount >= 20)
             {
                 TempData["ErrorMessage"] = "Nie możesz dodać więcej niż 20 usług.";
@@ -176,7 +168,6 @@ namespace TurboReserve.Controllers
                 Description = service.Description,
                 Price = service.Price
             };
-
             return View(model);
         }
 
@@ -186,10 +177,7 @@ namespace TurboReserve.Controllers
 
         public async Task<IActionResult> EditService(Service model)
         {
-           
-
             var userId = _userManager.GetUserId(User);
-
             var service = await _context.Services
                 .Where(s => s.ServiceProvider.IdentityUserId == userId && s.Id == model.Id)
                 .FirstOrDefaultAsync();
@@ -203,31 +191,25 @@ namespace TurboReserve.Controllers
             service.Name = model.Name;
             service.Description = model.Description;
             service.Price = model.Price;
-
             _context.Update(service);
             await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = "Usługa została zaktualizowana pomyślnie.";
             return RedirectToAction("Index");
         }
 
 
-        // GET: ServiceProviderPanel/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var userId = _userManager.GetUserId(User);
             var serviceProviderId = await GetServiceProviderIdByUserId(userId);
-
             var service = await _serviceService.GetByIdAsync(id);
             if (service == null || service.ServiceProviderId != serviceProviderId)
             {
                 return NotFound();
             }
-
             return View(service);
         }
 
-        
         public async Task<IActionResult> ManageReservations(DateTime? from, DateTime? to)
         {
             var userId = _userManager.GetUserId(User);
@@ -256,7 +238,6 @@ namespace TurboReserve.Controllers
 
             return View(reservations);
         }
-
 
 
         [HttpPost]
@@ -291,7 +272,6 @@ namespace TurboReserve.Controllers
         }
 
 
-
         private async Task<int> GetServiceProviderIdByUserId(string userId)
         {
             var serviceProvider = await _context.ServiceProviders
@@ -301,7 +281,6 @@ namespace TurboReserve.Controllers
             {
                 throw new InvalidOperationException("Nie znaleziono usługodawcy dla zalogowanego użytkownika.");
             }
-
             return serviceProvider.Id;
         }
     }

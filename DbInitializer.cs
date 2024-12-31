@@ -19,7 +19,6 @@ namespace TurboReserve
                 await roleManager.CreateAsync(new IdentityRole("Customer"));
             }
 
-            // Dalsze seedowanie użytkowników, jeśli wymagane
         }
     }
 

@@ -44,3 +44,11 @@
     padding: 2rem;
     border-radius: 0.5rem;
 }
+
+.nav nav-pills {
+    color: #d6a2e8 !important;
+}
+
+.nav-item {
+    color: #d6a2e8 !important;
+}

@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Importuj grafik z pliku Excel";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="ImportExcel" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Wybierz plik Excel</label>
+        <input type="file" id="excelFile" name="excelFile" class="form-control" accept=".xlsx" />
+    </div>
+    <a asp-action="GenerateTemplate" class="btn btn-primary mt-3">Wygeneruj wzorzec Excel</a>
+    <button type="submit" class="btn btn-primary mt-3">Importuj</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Anuluj</a>
+</form>
+<br>
+
+
+<div class="mt-5 text-center">
+    
+    <img src="/Data/template.png" alt="Wzorzec pliku Excel" class="img-fluid" />
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}

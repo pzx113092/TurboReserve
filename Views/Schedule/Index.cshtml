@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<TurboReserve.Models.ScheduleSlot>
 
 <h1>Twój Grafik</h1>
-<p><a asp-action="Create" class="btn btn-primary">Dodaj dostępny termin</a></p>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Dodaj dostępny termin</a>
+    <a asp-action="ImportExcel" class="btn btn-primary">Importuj z pliku</a>
+</p>
 
 <form method="get" asp-action="Index">
     <div class="row">

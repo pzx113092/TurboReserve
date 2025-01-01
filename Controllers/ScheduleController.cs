@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TurboReserve.Data;
 using TurboReserve.Models;
 using TurboReserve.Services;
+using OfficeOpenXml;
 
 [Authorize(Roles = "ServiceProvider")]
 public class ScheduleController : Controller
@@ -115,8 +116,6 @@ public class ScheduleController : Controller
         return View(scheduleSlots);
     }
 
-
-
     private async Task<int> GetServiceProviderIdByUserId(string userId)
     {
         var serviceProvider = await _context.ServiceProviders
@@ -128,5 +127,119 @@ public class ScheduleController : Controller
         }
 
         return serviceProvider.Id;
+    }
+
+    [HttpGet]
+    public IActionResult ImportExcel()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportExcel(IFormFile excelFile)
+    {
+        if (excelFile == null || excelFile.Length == 0)
+        {
+            TempData["ErrorMessage"] = "Nie przesłano żadnego pliku.";
+            return RedirectToAction(nameof(ImportExcel));
+        }
+
+        try
+        {
+            var userId = _userManager.GetUserId(User); // Pobranie ID użytkownika
+            int serviceProviderId = await GetServiceProviderIdByUserId(userId); // Pobranie ID usługodawcy
+
+            using var stream = new MemoryStream();
+            await excelFile.CopyToAsync(stream);
+            using var package = new ExcelPackage(stream);
+            var worksheet = package.Workbook.Worksheets[0]; // Pierwszy arkusz
+
+            var slots = new List<ScheduleSlot>();
+
+            for (int row = 2; row <= worksheet.Dimension.End.Row; row++) // Zakłada, że pierwszy wiersz to nagłówki
+            {
+                var serviceId = int.Parse(worksheet.Cells[row, 1].Text);
+                var startTime = DateTime.Parse(worksheet.Cells[row, 2].Text);
+                var endTime = DateTime.Parse(worksheet.Cells[row, 3].Text);
+
+                // Walidacja: StartTime musi być wcześniejszy niż EndTime
+                if (startTime >= endTime)
+                {
+                    TempData["ErrorMessage"] = $"Niepoprawny przedział czasu w wierszu {row}.";
+                    continue;
+                }
+
+                // Tworzenie obiektu ScheduleSlot
+                slots.Add(new ScheduleSlot
+                {
+                    ServiceId = serviceId,
+                    StartTime = startTime,
+                    EndTime = endTime,
+                    ServiceProviderId = serviceProviderId // Przypisanie ID usługodawcy
+                });
+            }
+
+            // Dodanie slotów do bazy danych
+            _context.ScheduleSlots.AddRange(slots);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"{slots.Count} terminów zostało pomyślnie zaimportowanych.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Wystąpił błąd podczas przetwarzania pliku: " + ex.Message;
+            return RedirectToAction(nameof(ImportExcel));
+        }
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> GenerateTemplate()
+    {
+        var services = await _context.Services
+            .Select(s => new { s.Id, s.Name })
+            .ToListAsync();
+
+        using var package = new ExcelPackage();
+
+        
+
+        var templateSheet = package.Workbook.Worksheets.Add("Wzorzec");
+        templateSheet.Cells[1, 1].Value = "ServiceId";
+        templateSheet.Cells[1, 2].Value = "StartTime";
+        templateSheet.Cells[1, 3].Value = "EndTime";
+
+        templateSheet.Cells[2, 1].Value = "1"; 
+        templateSheet.Cells[2, 2].Value = DateTime.Today.AddHours(9).ToString("yyyy-MM-dd HH:mm"); 
+        templateSheet.Cells[2, 3].Value = DateTime.Today.AddHours(10).ToString("yyyy-MM-dd HH:mm"); 
+
+        templateSheet.Cells[1, 1, 1, 3].Style.Font.Bold = true; 
+        templateSheet.Columns[1].AutoFit();
+        templateSheet.Columns[2].AutoFit();
+        templateSheet.Columns[3].AutoFit();
+
+        var servicesSheet = package.Workbook.Worksheets.Add("Dostępne Usługi");
+        servicesSheet.Cells[1, 1].Value = "Id";
+        servicesSheet.Cells[1, 2].Value = "Nazwa Usługi";
+
+        for (int i = 0; i < services.Count; i++)
+        {
+            servicesSheet.Cells[i + 2, 1].Value = services[i].Id;
+            servicesSheet.Cells[i + 2, 2].Value = services[i].Name;
+        }
+
+        servicesSheet.Cells[1, 1, 1, 2].Style.Font.Bold = true; 
+        servicesSheet.Columns[1].AutoFit();
+        servicesSheet.Columns[2].AutoFit();
+
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+
+        var fileName = $"Wzorzec_Slotow_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 }

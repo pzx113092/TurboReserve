@@ -1,4 +1,9 @@
-W razie problemów z kompilacją wprowadź do konsoli:
+Autorzy:
+<br><b>
+<br>Jakub Olejnik
+<br>Dawid Majewski</b>
+
+<br>W razie problemów z kompilacją wprowadź do konsoli:
 
 ```cmd
 dotnet nuget remove source "Microsoft Visual Studio Offline Packages"

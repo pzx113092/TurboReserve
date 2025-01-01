@@ -130,6 +130,53 @@ public class ScheduleController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var slot = await _context.ScheduleSlots
+            .Include(s => s.Service)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (slot == null)
+        {
+            return NotFound();
+        }
+
+        if (slot.IsBooked)
+        {
+            TempData["ErrorMessage"] = "Nie można usunąć terminu, który ma przypisaną rezerwację.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        return View(slot);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var slot = await _context.ScheduleSlots.FirstOrDefaultAsync(s => s.Id == id);
+
+        if (slot == null)
+        {
+            return NotFound();
+        }
+
+        if (slot.IsBooked)
+        {
+            TempData["ErrorMessage"] = "Nie można usunąć terminu, który ma przypisaną rezerwację.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        _context.ScheduleSlots.Remove(slot);
+        await _context.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Termin został pomyślnie usunięty.";
+        return RedirectToAction(nameof(Index));
+    }
+
+
+
+    [HttpGet]
     public IActionResult ImportExcel()
     {
         return View();
@@ -147,44 +194,60 @@ public class ScheduleController : Controller
 
         try
         {
-            var userId = _userManager.GetUserId(User); // Pobranie ID użytkownika
-            int serviceProviderId = await GetServiceProviderIdByUserId(userId); // Pobranie ID usługodawcy
+            var userId = _userManager.GetUserId(User); 
+            int serviceProviderId = await GetServiceProviderIdByUserId(userId); 
 
             using var stream = new MemoryStream();
             await excelFile.CopyToAsync(stream);
             using var package = new ExcelPackage(stream);
-            var worksheet = package.Workbook.Worksheets[0]; // Pierwszy arkusz
+            var worksheet = package.Workbook.Worksheets[0]; 
 
             var slots = new List<ScheduleSlot>();
+            int maxSlotsPerImport = 100; // Ograniczenie maksymalnej liczby slotów na import
+            int processedRows = 0;
 
-            for (int row = 2; row <= worksheet.Dimension.End.Row; row++) // Zakłada, że pierwszy wiersz to nagłówki
+            for (int row = 2; row <= worksheet.Dimension.End.Row && processedRows < maxSlotsPerImport; row++) 
             {
                 var serviceId = int.Parse(worksheet.Cells[row, 1].Text);
                 var startTime = DateTime.Parse(worksheet.Cells[row, 2].Text);
                 var endTime = DateTime.Parse(worksheet.Cells[row, 3].Text);
 
-                // Walidacja: StartTime musi być wcześniejszy niż EndTime
-                if (startTime >= endTime)
+                // Walidacja: Slot nie może być w przeszłości
+                if (startTime < DateTime.Now)
                 {
-                    TempData["ErrorMessage"] = $"Niepoprawny przedział czasu w wierszu {row}.";
+                    TempData["ErrorMessage"] = $"Wiersz {row}: Slot z wsteczną datą rozpoczęcia został pominięty.";
                     continue;
                 }
 
-                // Tworzenie obiektu ScheduleSlot
+                // Walidacja: StartTime musi być wcześniejszy niż EndTime
+                if (startTime >= endTime)
+                {
+                    TempData["ErrorMessage"] = $"Wiersz {row}: Niepoprawny przedział czasu.";
+                    continue;
+                }
+
                 slots.Add(new ScheduleSlot
                 {
                     ServiceId = serviceId,
                     StartTime = startTime,
                     EndTime = endTime,
-                    ServiceProviderId = serviceProviderId // Przypisanie ID usługodawcy
+                    ServiceProviderId = serviceProviderId 
                 });
+
+                processedRows++;
             }
 
-            // Dodanie slotów do bazy danych
-            _context.ScheduleSlots.AddRange(slots);
-            await _context.SaveChangesAsync();
+            if (slots.Count > 0)
+            {
+                _context.ScheduleSlots.AddRange(slots);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"{slots.Count} terminów zostało pomyślnie zaimportowanych.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Żadne sloty nie zostały zaimportowane.";
+            }
 
-            TempData["SuccessMessage"] = $"{slots.Count} terminów zostało pomyślnie zaimportowanych.";
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)

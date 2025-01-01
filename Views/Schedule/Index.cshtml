@@ -37,17 +37,29 @@ else
                 <th>Początek</th>
                 <th>Koniec</th>
                 <th>Zarezerwowane</th>
+                <th>Akcje</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var slot in Model.OrderBy(s => s.StartTime))
             {
                 <tr>
-                    <td>@slot.Service.Name</td>
-                    <td>@slot.StartTime.ToString("g")</td>
-                    <td>@slot.EndTime.ToString("g")</td>
-                    <td>@(slot.IsBooked ? "Tak" : "Nie")</td>
-                </tr>
+                <td>@slot.Service.Name</td>
+                <td>@slot.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@slot.EndTime.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@(slot.IsBooked ? "Tak" : "Nie")</td>
+                <td>
+                    @if (!slot.IsBooked)
+                    {
+                        <form asp-action="DeleteConfirmed" asp-route-id="@slot.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger" 
+                                    onclick="return confirm('Czy na pewno chcesz usunąć ten termin?');">
+                                Usuń
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>

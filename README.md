@@ -1,9 +1,9 @@
-Autorzy:
-<br><b>
-<br>Jakub Olejnik
-<br>Dawid Majewski</b>
-
-<br>W razie problemów z kompilacją wprowadź do konsoli:
+<h1>Autorzy</h1>
+Jakub Olejnik
+<br>Dawid Majewski
+<h1>
+Uruchamianie</h1>
+<p>Sklonuj repozytorium i otwórz w Visual Studio lub Visual Studio Code. Przed kompilacją odśwież pakiety nuget:</p>
 
 ```cmd
 dotnet nuget remove source "Microsoft Visual Studio Offline Packages"

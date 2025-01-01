@@ -37,12 +37,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var slot in Model)
+            @foreach (var slot in Model.OrderBy(s => s.StartTime))
             {
                 <tr>
                     <td>@slot.Service.Name</td>
-                    <td>@slot.StartTime</td>
-                    <td>@slot.EndTime</td>
+                    <td>@slot.StartTime.ToString("g")</td>
+                    <td>@slot.EndTime.ToString("g")</td>
                     <td>@(slot.IsBooked ? "Tak" : "Nie")</td>
                 </tr>
             }

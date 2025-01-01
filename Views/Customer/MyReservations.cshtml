@@ -19,13 +19,13 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var reservation in Model.Where(r => r.Status != "Completed"))
+            @foreach (var reservation in Model.Where(r => r.Status != "Completed").OrderBy(r => r.StartTime))
             {
                 <tr>
                     <td>@reservation.ServiceName</td>
                     <td>@reservation.ServiceProviderName</td>
-                    <td>@reservation.StartTime</td>
-                    <td>@reservation.EndTime</td>
+                    <td>@reservation.StartTime.ToString("g")</td>
+                    <td>@reservation.EndTime.ToString("g")</td>
                     <td>@reservation.Status</td>
                 </tr>
             }

@@ -82,8 +82,8 @@ public class ScheduleController : Controller
                 }).ToList()
         };
 
-        ViewBag.StartDate = startDate.ToString("yyyy-MM-dd");
-        ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");
+        ViewBag.StartDate = startDate.ToString("dd.mm.yyyy");
+        ViewBag.EndDate = endDate.ToString("dd.mm.yyyy");
 
         return View(viewModel);
     }
@@ -93,10 +93,8 @@ public class ScheduleController : Controller
     {
         var userId = _userManager.GetUserId(User);
 
-
         var startDate = from ?? DateTime.Today;
         var endDate = to ?? DateTime.Today.AddDays(7);
-
 
         if (startDate > endDate)
         {
@@ -104,18 +102,19 @@ public class ScheduleController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-
         var scheduleSlots = await _context.ScheduleSlots
             .Include(slot => slot.Service)
             .Where(slot => slot.Service.ServiceProvider.IdentityUserId == userId &&
-                           slot.StartTime.Date >= startDate && slot.StartTime.Date <= endDate)
+                        slot.StartTime.Date >= startDate && slot.StartTime.Date <= endDate)
+            .OrderBy(slot => slot.StartTime) 
             .ToListAsync();
 
+        ViewBag.StartDate = startDate.ToString("yyyy-MM-dd"); 
+        ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");     
 
-        ViewBag.StartDate = startDate.ToString("yyyy-MM-dd");
-        ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");
         return View(scheduleSlots);
     }
+
 
 
     private async Task<int> GetServiceProviderIdByUserId(string userId)

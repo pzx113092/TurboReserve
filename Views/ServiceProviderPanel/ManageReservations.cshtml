@@ -32,29 +32,29 @@ else
                 <th>Usługa</th>
                 <th>Klient</th>
                 <th>Data rezerwacji</th>
-                <th>Godzina rozpoczęcia</th>
-                <th>Godzina zakończenia</th>
+                <th>Data i godzina rozpoczęcia</th>
+                <th>Data i godzina zakończenia</th>
                 <th>Status</th>
                 <th>Akcje</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var reservation in Model)
+            @foreach (var reservation in Model.OrderBy(r => r.StartTime))
             {
                 <tr>
                     <td>@reservation.ServiceName</td>
                     <td>@reservation.CustomerName</td>
                     <td>@reservation.ReservationDate.ToShortDateString()</td>
-                    <td>@reservation.StartTime.ToShortTimeString()</td>
-                    <td>@reservation.EndTime.ToShortTimeString()</td>
+                    <td>@reservation.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@reservation.EndTime.ToString("dd.MM.yyyy HH:mm")</td>
                     <td>@reservation.Status</td>
                     <td>
                         <form method="post" asp-action="UpdateReservationStatus" asp-route-id="@reservation.ReservationId">
                             <select name="status" class="form-select">
-                                <option value="Pending" selected="@reservation.Status == " Pending"">Oczekująca</option>
-                                <option value="Confirmed" selected="@reservation.Status == " Confirmed"">Potwierdzona</option>
-                                <option value="Completed" selected="@reservation.Status == " Completed"">Zakończona</option>
-                                <option value="Canceled" selected="@reservation.Status == " Canceled"">Anulowana</option>
+                                <option value="Pending" selected="@reservation.Status == "Pending"">Oczekująca</option>
+                                <option value="Confirmed" selected="@reservation.Status == "Confirmed"">Potwierdzona</option>
+                                <option value="Completed" selected="@reservation.Status == "Completed"">Zakończona</option>
+                                <option value="Canceled" selected="@reservation.Status == "Canceled"">Anulowana</option>
                             </select>
                             <button type="submit" class="btn btn-primary mt-2">Zmień status</button>
                         </form>
@@ -62,7 +62,8 @@ else
                 </tr>
             }
         </tbody>
-    </table>
+</table>
+
 }
 
      

@@ -2,7 +2,7 @@
 
 <h1>Grafik dla usługi: @Model.ServiceName</h1>
 
-@if (Model.ScheduleSlots.Count == 0)
+@if (!Model.ScheduleSlots.Any())
 {
     <p>Brak dostępnych terminów.</p>
 }
@@ -17,11 +17,11 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var slot in Model.ScheduleSlots)
+            @foreach (var slot in Model.ScheduleSlots.OrderBy(s => s.StartTime))
             {
                 <tr>
-                    <td>@slot.StartTime</td>
-                    <td>@slot.EndTime</td>
+                    <td>@slot.StartTime.ToString("g")</td>
+                    <td>@slot.EndTime.ToString("g")</td>
                     <td>
                         @if (!slot.IsBooked)
                         {
@@ -36,7 +36,6 @@ else
                     </td>
                 </tr>
             }
-            
         </tbody>
     </table>
 }

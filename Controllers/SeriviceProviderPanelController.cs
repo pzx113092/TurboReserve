@@ -52,8 +52,8 @@ namespace TurboReserve.Controllers
                 .ToListAsync();
 
             
-            ViewBag.StartDate = startDate.ToString("yyyy-MM-dd");
-            ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");
+            ViewBag.StartDate = startDate.ToString("dd.mm.yyyy");
+            ViewBag.EndDate = endDate.ToString("dd.mm.yyyy");
 
             return View(scheduleSlots);
         }
@@ -233,8 +233,8 @@ namespace TurboReserve.Controllers
                 })
                 .ToListAsync();
 
-            ViewBag.StartDate = startDate.ToString("yyyy-MM-dd");
-            ViewBag.EndDate = endDate.ToString("yyyy-MM-dd");
+            ViewBag.StartDate = startDate.ToString("dd.mm.yyyy");
+            ViewBag.EndDate = endDate.ToString("dd.mm.yyyy");
 
             return View(reservations);
         }

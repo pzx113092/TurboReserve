@@ -38,17 +38,17 @@
                                 <a class="nav-link" asp-controller="Schedule" asp-action="Index">Mój grafik</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="ServiceProviderPanel" asp-action="ManageReservations">Zarządzanie Rezerwacjami</a>
+                                <a class="nav-link" asp-controller="ServiceProviderPanel" asp-action="ManageReservations">Zarządzanie rezerwacjami</a>
 
                             </li>
                         }
 
                         @if (User.IsInRole("Customer")){
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Customer" asp-action="ServiceProviders">Lista Usługodawców</a>
+                                <a class="nav-link" asp-controller="Customer" asp-action="ServiceProviders">Lista usługodawców</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Customer" asp-action="MyReservations">Moje Rezerwacje</a>
+                                <a class="nav-link" asp-controller="Customer" asp-action="MyReservations">Moje rezerwacje</a>
                             </li>
                         }
                     </ul>

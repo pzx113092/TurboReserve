@@ -1,6 +1,6 @@
 ﻿@model TurboReserve.Models.ScheduleSlot
 
-<h1>Dodaj Dostępny Termin</h1>
+<h1>Dodaj dostępny termin</h1>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
@@ -20,7 +20,7 @@
         <input asp-for="EndTime" type="datetime-local" class="form-control" placeholder="Wybierz czas zakończenia" />
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
-
+    <br>
     <button type="submit" class="btn btn-primary">Dodaj</button>
     <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
 </form>

@@ -1,5 +1,8 @@
 ﻿@if (User.IsInRole("Customer"))
 {
-    <h1>Witaj Kliencie</h1>
-    <p>Możesz rezerwować usługi</p>
+    <script>
+    setTimeout(function() {
+        window.location.href = '/Customer/ServiceProviders';
+    }, 1); 
+    </script>
 }

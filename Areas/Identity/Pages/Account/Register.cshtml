@@ -11,6 +11,7 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Utwórz nowe konto</h2>
             <hr />
+            
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -29,11 +30,13 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Zarejestruj</button>
         </form>
+        
     </div>
     
+
 </div>
-
-
+<br>
+<a href="/Identity/Account/RegisterServiceProvider" style="color: #844f96; font-weight: bold; text-decoration: none;">Jestem usługodawcą</a>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

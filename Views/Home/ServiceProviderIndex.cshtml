@@ -1,5 +1,9 @@
 ﻿@if (User.IsInRole("ServiceProvider"))
 {
-    <h1>Witaj Usługodawco</h1>
-    <p>Możesz zarządzać swoimi ofertami</p>
+    <script>
+    setTimeout(function() {
+        window.location.href = '/Schedule';
+    }, 1); 
+    </script>
 }
+dot

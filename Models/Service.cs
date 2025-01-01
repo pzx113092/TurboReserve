@@ -12,11 +12,11 @@ namespace TurboReserve.Models
         [StringLength(50, ErrorMessage = "Cena nie może przekraczać 50 znaków.")]
         public string Price { get; set; }
         public int ServiceProviderId { get; set; }
-        [Required]
+        
         public ServiceProvider ServiceProvider { get; set; }
-        [Required]
+        
         public List<ScheduleSlot> ScheduleSlots { get; set; }
-        [Required]
+        
         public List<Reservation> Reservations { get; set; }
     }
 }

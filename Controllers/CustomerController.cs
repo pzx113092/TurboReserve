@@ -22,8 +22,12 @@ namespace TurboReserve.Controllers
             _userManager = userManager;
         }
 
+
+        
         public async Task<IActionResult> ServiceSchedule(int id)
         {
+
+
             var service = await _context.Services
                 .Include(s => s.ScheduleSlots.Where(slot => !slot.IsBooked))
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -32,6 +36,8 @@ namespace TurboReserve.Controllers
             {
                 return NotFound();
             }
+
+        
 
             var viewModel = new ServiceScheduleViewModel
             {

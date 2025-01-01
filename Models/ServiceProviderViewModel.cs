@@ -15,7 +15,6 @@ namespace TurboReserve.Models
         public string ZipCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        [Required]
         public List<ServiceViewModel> Services { get; set; }
     }
 

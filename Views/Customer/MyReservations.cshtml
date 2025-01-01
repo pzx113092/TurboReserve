@@ -2,9 +2,9 @@
 
 <h1>Moje Rezerwacje</h1>
 
-@if (!Model.Any())
+@if (!Model.Any(r => r.Status != "Completed"))
 {
-    <p>Nie masz jeszcze żadnych rezerwacji.</p>
+    <p>Nie masz jeszcze żadnych aktywnych rezerwacji.</p>
 }
 else
 {
@@ -13,21 +13,19 @@ else
             <tr>
                 <th>Usługa</th>
                 <th>Usługodawca</th>
-                <th>Data rezerwacji</th>
-                <th>Godzina rozpoczęcia</th>
-                <th>Godzina zakończenia</th>
+                <th>Data i godzina rozpoczęcia</th>
+                <th>Data i godzina zakończenia</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var reservation in Model)
+            @foreach (var reservation in Model.Where(r => r.Status != "Completed"))
             {
                 <tr>
                     <td>@reservation.ServiceName</td>
                     <td>@reservation.ServiceProviderName</td>
-                    <td>@reservation.ReservationDate.ToShortDateString()</td>
-                    <td>@reservation.StartTime.ToShortTimeString()</td>
-                    <td>@reservation.EndTime.ToShortTimeString()</td>
+                    <td>@reservation.StartTime</td>
+                    <td>@reservation.EndTime</td>
                     <td>@reservation.Status</td>
                 </tr>
             }

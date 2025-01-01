@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-TurboReserve-f57d32a6-5636-41e2-a193-cdf56c9c9b90</UserSecretsId>
+    <NoWarn>CS8601;CS8602;CS8618;CS8603;CS8604;CS8765</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

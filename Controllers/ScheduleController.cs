@@ -27,6 +27,7 @@ public class ScheduleController : Controller
         .Where(s => s.ServiceProviderId == serviceProviderId)
         .ToListAsync();
         ViewBag.Services = services;
+        ViewBag.ServiceProviderId = serviceProviderId;
 
         return View();
     }
@@ -36,6 +37,19 @@ public class ScheduleController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ScheduleSlot model)
     {
+        {
+        
+        foreach (var state in ModelState)
+            {   
+                foreach(var error in state.Value.Errors) {
+                    Console.WriteLine($"Błąd w polu {state.Key}: {error.ErrorMessage}");
+                    if (error.ErrorMessage.Equals("EndTime must be later than StartTime.")){
+                        TempData["ErrorMessage"] = "Data początkowa nie może być późniejsza niż data końcowa!";
+                        if(state.Value.Errors.Count > 1) return RedirectToAction(nameof(Index));
+                    }
+                }
+            }
+        }
         var userId = _userManager.GetUserId(User);
         int serviceProviderId = await GetServiceProviderIdByUserId(userId);
         model.ServiceProviderId = serviceProviderId;
@@ -53,11 +67,6 @@ public class ScheduleController : Controller
         var service = await _context.Services
             .Include(s => s.ScheduleSlots)
             .FirstOrDefaultAsync(s => s.Id == id);
-
-        if (service == null)
-        {
-            return NotFound();
-        }
 
         var viewModel = new ServiceScheduleViewModel
         {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using TurboReserve.Data;
-using TurboReserve.Models; 
+using TurboReserve.Models;
 
 namespace TurboReserve.Areas.Identity.Pages.Account
 {
@@ -13,26 +13,32 @@ namespace TurboReserve.Areas.Identity.Pages.Account
     {
         public class RegisterServiceProviderInputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Nazwa firmy jest wymagana.")]
             public required string BusinessName { get; set; }
 
-            [Required, EmailAddress]
+            [Required(ErrorMessage = "Email jest wymagany."), EmailAddress(ErrorMessage = "Podaj poprawny adres email.")]
             public required string Email { get; set; }
 
-            [Required, DataType(DataType.Password)]
+            [Required(ErrorMessage = "Hasło jest wymagane."), DataType(DataType.Password)]
             public required string Password { get; set; }
 
-            [Required, DataType(DataType.Password)]
-            [Compare("Password")]
+            [Required(ErrorMessage = "Potwierdzenie hasła jest wymagane."), DataType(DataType.Password)]
+            [Compare("Password", ErrorMessage = "Hasło i potwierdzenie hasła muszą być takie same.")]
             public required string ConfirmPassword { get; set; }
 
+            [Required(ErrorMessage = "Adres jest wymagany.")]
             public required string Address { get; set; }
+
+            [Required(ErrorMessage = "Miasto jest wymagane.")]
             public required string City { get; set; }
+
+            [Required(ErrorMessage = "Kod pocztowy jest wymagany.")]
             public required string ZipCode { get; set; }
-            [Required]
+
+            [Required(ErrorMessage = "Szerokość geograficzna jest wymagana.")]
             public double Latitude { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Długość geograficzna jest wymagana.")]
             public double Longitude { get; set; }
         }
 
@@ -74,10 +80,10 @@ namespace TurboReserve.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    
+
                     await _userManager.AddToRoleAsync(user, "ServiceProvider");
 
-                    
+
                     var serviceProvider = new Models.ServiceProvider
                     {
                         IdentityUserId = user.Id,
@@ -87,12 +93,12 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                         ZipCode = Input.ZipCode,
                         Latitude = Input.Latitude,
                         Longitude = Input.Longitude
-                        
+
                     };
                     _context.ServiceProviders.Add(serviceProvider);
                     await _context.SaveChangesAsync();
 
-                    _logger.LogInformation("User created a new account with password and assigned as ServiceProvider.");
+                    _logger.LogInformation("Użytkownik utworzył nowe konto z hasłem i został przypisany jako ServiceProvider.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
@@ -103,7 +109,7 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                 }
             }
 
-           
+
             return Page();
         }
     }

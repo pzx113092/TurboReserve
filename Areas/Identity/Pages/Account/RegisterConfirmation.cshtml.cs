@@ -3,6 +3,7 @@
 #nullable disable
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,7 @@ namespace TurboReserve.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        
         public string Email { get; set; }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace TurboReserve.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return NotFound($"Unable to load user with email '{email}'.");
+                return NotFound($"Nie można załadować użytkownika z adresem e-mail '{email}'.");
             }
 
             Email = email;

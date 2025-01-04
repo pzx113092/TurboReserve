@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Threading.Tasks;
 using TurboReserve.Data;
 using TurboReserve.Models;
@@ -14,26 +15,26 @@ namespace TurboReserve.Areas.Identity.Pages.Account
         public class RegisterServiceProviderInputModel
         {
             [Required(ErrorMessage = "Nazwa firmy jest wymagana.")]
-            public required string BusinessName { get; set; }
+            public string BusinessName { get; set; }
 
             [Required(ErrorMessage = "Email jest wymagany."), EmailAddress(ErrorMessage = "Podaj poprawny adres email.")]
-            public required string Email { get; set; }
+            public string Email { get; set; }
 
             [Required(ErrorMessage = "Hasło jest wymagane."), DataType(DataType.Password)]
-            public required string Password { get; set; }
+            public string Password { get; set; }
 
             [Required(ErrorMessage = "Potwierdzenie hasła jest wymagane."), DataType(DataType.Password)]
             [Compare("Password", ErrorMessage = "Hasło i potwierdzenie hasła muszą być takie same.")]
-            public required string ConfirmPassword { get; set; }
+            public string ConfirmPassword { get; set; }
 
             [Required(ErrorMessage = "Adres jest wymagany.")]
-            public required string Address { get; set; }
+            public string Address { get; set; }
 
             [Required(ErrorMessage = "Miasto jest wymagane.")]
-            public required string City { get; set; }
+            public string City { get; set; }
 
             [Required(ErrorMessage = "Kod pocztowy jest wymagany.")]
-            public required string ZipCode { get; set; }
+            public string ZipCode { get; set; }
 
             [Required(ErrorMessage = "Szerokość geograficzna jest wymagana.")]
             public double Latitude { get; set; }
@@ -80,9 +81,11 @@ namespace TurboReserve.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-
                     await _userManager.AddToRoleAsync(user, "ServiceProvider");
 
+                    // Parsowanie Latitude i Longitude z InvariantCulture
+                    var latitude = double.Parse(Input.Latitude.ToString(), CultureInfo.InvariantCulture);
+                    var longitude = double.Parse(Input.Longitude.ToString(), CultureInfo.InvariantCulture);
 
                     var serviceProvider = new Models.ServiceProvider
                     {
@@ -91,9 +94,8 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                         Address = Input.Address,
                         City = Input.City,
                         ZipCode = Input.ZipCode,
-                        Latitude = Input.Latitude,
-                        Longitude = Input.Longitude
-
+                        Latitude = latitude,
+                        Longitude = longitude
                     };
                     _context.ServiceProviders.Add(serviceProvider);
                     await _context.SaveChangesAsync();
@@ -109,8 +111,9 @@ namespace TurboReserve.Areas.Identity.Pages.Account
                 }
             }
 
-
             return Page();
         }
+
+
     }
 }

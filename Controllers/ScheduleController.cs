@@ -261,28 +261,51 @@ public class ScheduleController : Controller
     [HttpGet]
     public async Task<IActionResult> GenerateTemplate()
     {
+        // Pobranie ID zalogowanego użytkownika
+        var userId = _userManager.GetUserId(User);
+
+        // Pobranie ID usługodawcy na podstawie użytkownika
+        var serviceProviderId = await _context.ServiceProviders
+            .Where(sp => sp.IdentityUserId == userId)
+            .Select(sp => sp.Id)
+            .FirstOrDefaultAsync();
+
+        if (serviceProviderId == 0)
+        {
+            TempData["ErrorMessage"] = "Nie można znaleźć powiązanego usługodawcy.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Pobranie usług przypisanych do zalogowanego usługodawcy
         var services = await _context.Services
+            .Where(s => s.ServiceProviderId == serviceProviderId)
             .Select(s => new { s.Id, s.Name })
             .ToListAsync();
 
+        if (!services.Any())
+        {
+            TempData["ErrorMessage"] = "Nie znaleziono żadnych usług przypisanych do Twojego konta.";
+            return RedirectToAction(nameof(Index));
+        }
+
         using var package = new ExcelPackage();
 
-        
-
+        // Arkusz wzorca do wypełnienia
         var templateSheet = package.Workbook.Worksheets.Add("Wzorzec");
         templateSheet.Cells[1, 1].Value = "ServiceId";
         templateSheet.Cells[1, 2].Value = "StartTime";
         templateSheet.Cells[1, 3].Value = "EndTime";
 
-        templateSheet.Cells[2, 1].Value = "1"; 
-        templateSheet.Cells[2, 2].Value = DateTime.Today.AddHours(9).ToString("yyyy-MM-dd HH:mm"); 
-        templateSheet.Cells[2, 3].Value = DateTime.Today.AddHours(10).ToString("yyyy-MM-dd HH:mm"); 
+        templateSheet.Cells[2, 1].Value = services.First().Id; // Przykładowy ServiceId
+        templateSheet.Cells[2, 2].Value = DateTime.Today.AddHours(9).ToString("yyyy-MM-dd HH:mm");
+        templateSheet.Cells[2, 3].Value = DateTime.Today.AddHours(10).ToString("yyyy-MM-dd HH:mm");
 
-        templateSheet.Cells[1, 1, 1, 3].Style.Font.Bold = true; 
+        templateSheet.Cells[1, 1, 1, 3].Style.Font.Bold = true; // Nagłówki pogrubione
         templateSheet.Columns[1].AutoFit();
         templateSheet.Columns[2].AutoFit();
         templateSheet.Columns[3].AutoFit();
 
+        // Arkusz z dostępnymi usługami
         var servicesSheet = package.Workbook.Worksheets.Add("Dostępne Usługi");
         servicesSheet.Cells[1, 1].Value = "Id";
         servicesSheet.Cells[1, 2].Value = "Nazwa Usługi";
@@ -293,10 +316,9 @@ public class ScheduleController : Controller
             servicesSheet.Cells[i + 2, 2].Value = services[i].Name;
         }
 
-        servicesSheet.Cells[1, 1, 1, 2].Style.Font.Bold = true; 
+        servicesSheet.Cells[1, 1, 1, 2].Style.Font.Bold = true; // Nagłówki pogrubione
         servicesSheet.Columns[1].AutoFit();
         servicesSheet.Columns[2].AutoFit();
-
 
         var stream = new MemoryStream();
         package.SaveAs(stream);
@@ -306,3 +328,4 @@ public class ScheduleController : Controller
         return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 }
+

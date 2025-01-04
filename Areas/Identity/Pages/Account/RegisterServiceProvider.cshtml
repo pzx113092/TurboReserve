@@ -64,33 +64,28 @@
                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
-                        const defaultLocation = [52.408238, 16.933504]; // Domyślna lokalizacja
+                        const defaultLocation = [52.408238, 16.933504];
                         const map = L.map('map').setView(defaultLocation, 13);
 
-                        
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         }).addTo(map);
 
-                        
                         const marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
 
-                        
                         const latitudeField = document.getElementById("Input_Latitude");
                         const longitudeField = document.getElementById("Input_Longitude");
+
                         if (latitudeField && longitudeField) {
-                            latitudeField.value = defaultLocation[0].toFixed(6);
-                            longitudeField.value = defaultLocation[1].toFixed(6);
+                            latitudeField.value = defaultLocation[0].toFixed(6).replace(',', '.');
+                            longitudeField.value = defaultLocation[1].toFixed(6).replace(',', '.');
                         }
 
-                        
-                        marker.on('dragend', function (e) {
+                        marker.on('dragend', function () {
                             const latLng = marker.getLatLng();
-
-                            
                             if (latitudeField && longitudeField) {
-                                latitudeField.value = latLng.lat.toFixed(6); 
-                                longitudeField.value = latLng.lng.toFixed(6); 
+                                latitudeField.value = latLng.lat.toFixed(6).replace(',', '.');
+                                longitudeField.value = latLng.lng.toFixed(6).replace(',', '.');
                             }
                         });
                     });

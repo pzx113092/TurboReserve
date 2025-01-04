@@ -7,7 +7,8 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var cultureInfo = new CultureInfo("pl-PL");
+//var cultureInfo = new CultureInfo("pl-PL");
+var cultureInfo = CultureInfo.InvariantCulture;
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 

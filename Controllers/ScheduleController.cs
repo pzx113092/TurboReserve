@@ -262,6 +262,7 @@ public class ScheduleController : Controller
     public async Task<IActionResult> GenerateTemplate()
     {
         // Pobranie ID zalogowanego użytkownika
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         var userId = _userManager.GetUserId(User);
 
         // Pobranie ID usługodawcy na podstawie użytkownika

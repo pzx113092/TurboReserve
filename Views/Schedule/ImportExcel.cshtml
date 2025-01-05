@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Importuj grafik z pliku Excel";
 }
 
@@ -13,12 +13,28 @@
     <button type="submit" class="btn btn-primary mt-3">Importuj</button>
     <a asp-action="Index" class="btn btn-secondary mt-3">Anuluj</a>
 </form>
-<br>
 
+<div class="mt-4">
+    <h4>Instrukcja importu</h4>
+    <p>Przed rozpoczęciem importu upewnij się, że przygotowany plik Excel jest zgodny z wymaganym formatem:</p>
+    <ul>
+        <li>
+            Plik powinien zawierać trzy kolumny:
+            <ul>
+                <li><strong>ServiceId</strong> - Identyfikator usługi (można znaleźć w zakładce "Dostępne Usługi" wygenerowanego wzorca).</li>
+                <li><strong>StartTime</strong> - Data i godzina rozpoczęcia w formacie <code>yyyy-MM-dd HH:mm</code>.</li>
+                <li><strong>EndTime</strong> - Data i godzina zakończenia w formacie <code>yyyy-MM-dd HH:mm</code>.</li>
+            </ul>
+        </li>
+        <li>Kolumny muszą być umieszczone w odpowiedniej kolejności.</li>
+        <li>Daty w przeszłości oraz błędne przedziały czasowe (gdzie StartTime ≥ EndTime) zostaną odrzucone podczas walidacji.</li>
+    </ul>
+    <p>Skorzystaj z przycisku <strong>"Wygeneruj wzorzec Excel"</strong>, aby pobrać przykładowy plik i dostosować go do swoich potrzeb.</p>
+</div>
 
 <div class="mt-5 text-center">
-    
     <img src="/Data/template.png" alt="Wzorzec pliku Excel" class="img-fluid" />
+    <p class="mt-2 text-muted">Przykładowy wzorzec pliku Excel</p>
 </div>
 
 @if (TempData["ErrorMessage"] != null)

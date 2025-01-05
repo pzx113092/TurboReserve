@@ -203,7 +203,7 @@ public class ScheduleController : Controller
             var worksheet = package.Workbook.Worksheets[0]; 
 
             var slots = new List<ScheduleSlot>();
-            int maxSlotsPerImport = 100; // Ograniczenie maksymalnej liczby slotów na import
+            int maxSlotsPerImport = 300; // Ograniczenie maksymalnej liczby slotów na import
             int processedRows = 0;
 
             for (int row = 2; row <= worksheet.Dimension.End.Row && processedRows < maxSlotsPerImport; row++) 
